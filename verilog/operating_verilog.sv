@@ -1,6 +1,6 @@
 module operating_verilog
 #(
-    parameter n = 5
+    parameter n = 6
     //parameter CNT = n
 )
 (
@@ -13,10 +13,11 @@ module operating_verilog
     input  logic state_inc_c,
     input  logic state_plus_6_c,
     input  logic state_inc_s,
+    input  logic state_wait,
     output logic [4:0] C[n], 
     output logic [3:0] s
 );
-
+                
 //два входных 8-ми битных операнда
 logic[3:0] A[n];
 logic[3:0] B[n];
@@ -36,6 +37,10 @@ always_ff @(posedge clk or negedge rst) begin
         end
         else
         begin
+            if (state_wait==1)
+            begin
+                //#2;
+            end
             if(state_sum==1)
             begin
                 C[n-s-1] <= A[n-s-1] + B[n-s-1] + C[n-s-1];

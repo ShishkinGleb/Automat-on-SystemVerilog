@@ -17,6 +17,8 @@ add wave /operation_testbench/dut/A
 add wave /operation_testbench/dut/B
 add wave /operation_testbench/C
 add wave /operation_testbench/C_out
+add wave /operation_testbench/dut_1/state
+add wave /operation_testbench/dut_1/next_state
 
 # run the simulation
 run -all

@@ -4,7 +4,7 @@ module operation_testbench;
 
     // input and output test signals
     //localparam n = 5;
-    localparam n = 5;
+    localparam n = 6;
     localparam CNT = n-1;
     logic [3:0] C_out[n];
     logic clk;
@@ -13,11 +13,17 @@ module operation_testbench;
     logic [3:0] B[n];
     logic [4:0] C[n];
     logic [3:0] s;
+    logic state_wait;
     logic state_load;
     logic state_sum;
     logic state_inc_c;
     logic state_plus_6_c;
     logic state_inc_s;
+    //logic start;
+    //logic final_avt;
+    logic x1;
+    logic x2;
+    logic x3;
 
  
     // creating the instance of the module we want to test
@@ -33,13 +39,34 @@ module operation_testbench;
         .state_sum(state_sum),
         .state_inc_c(state_inc_c),
         .state_plus_6_c(state_plus_6_c),
-        .state_inc_s(state_inc_s),  
+        .state_inc_s(state_inc_s),
+        .state_wait(state_wait),  
         .C(C), 
         .s(s)
         
     );
 
-    
+    control_verilog dut_1
+    (
+        .clk(clk),
+        .rst(rst),
+        .x1(x1),
+        .x2(x2),
+        .x3(x3),
+        .state_load(state_load),
+        .state_sum(state_sum),
+        .state_inc_c(state_inc_c),
+        .state_plus_6_c(state_plus_6_c),
+        .state_inc_s(state_inc_s),
+        .state_wait(state_wait)
+        //.final_avt(final_avt)
+
+    );
+
+    assign x1 = s < n;
+    assign x2 = C[CNT-s]>='b10000;
+    assign x3 = (C[CNT-s]>='b1010)&&(C[CNT-s]<='b1111);
+
 
     always
     #1 clk <= !clk;
@@ -69,15 +96,17 @@ module operation_testbench;
         begin
             clk = 0;
             rst = 0;
-            state_load = 0;
+            
+            //s = 6;
+            /*state_load = 0;
             state_sum = 0;
             state_inc_c = 0;
             state_plus_6_c = 0;
-            state_inc_s = 0;
+            state_inc_s = 0;*/
             
 
             #2;
-
+            
             rst = 1;
             //A[0] = 4'b0000;
             //A[1] = 4'b0110;
@@ -98,9 +127,10 @@ module operation_testbench;
             B[3] = 4'b1000;
             B[4] = 4'b0011;    // set test signals value
             
+
             #2;
             
-            state_load = 1;
+            /*state_load = 1;
             @(posedge clk);
             state_load = 0;
             @(posedge clk);
@@ -144,7 +174,7 @@ module operation_testbench;
                 @(posedge clk);
                 state_inc_s = 0;
                 @(posedge clk);
-            end
+            end*/
             //if (C_out[0]=='b0011)
             //begin
             //    
